@@ -164,6 +164,8 @@ int32_t JudgeDirection(const Point_t origin, const Point_t first, const Point_t 
  */
 void GrahamScan(Point_t* points, int32_t size, PointArray_t* stack)
 {
+	if(points == NULL || size <=0 || stack == NULL)
+		return;
 	int i, top, new_size;
 	PointArray_t points_array;
 	Point_t* rpoints;
@@ -173,6 +175,12 @@ void GrahamScan(Point_t* points, int32_t size, PointArray_t* stack)
 
 	rpoints = points_array.points;
 	new_size = points_array.size;
+
+	if(new_size < 3)
+	{
+		free(rpoints);
+		return;
+	}
 
 	top = 0;
 	stack->points[top++] = rpoints[0];
