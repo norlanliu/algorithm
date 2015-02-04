@@ -1,2 +1,2 @@
 # Algorithm
-Just recorde some algorithms
+Just record some algorithms
