@@ -20,6 +20,12 @@
 #include<iostream>
 using namespace std;
 
+/*
+ * Special case :
+ * 1. 0
+ * 2. signal
+ * 3. overflow : abs(INT_MIN) = abs(INT_MAX) + 1;
+ */
 class Solution{
 	public:
 		int divide(int dividend, int divisor){
