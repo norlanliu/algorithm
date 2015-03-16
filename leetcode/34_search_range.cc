@@ -23,8 +23,9 @@ using namespace std;
 
 class Solution{
 	public:
-		int searchInsert(int A[], int n, int target){
+		vector<int> searchRange(int A[], int n, int target){
 			int left, right, middle;
+			vector<int> ans;
 			left = 0;
 			right = n;
 			while(left < right){
@@ -35,20 +36,32 @@ class Solution{
 				else
 					right = middle;
 			}
-			return right;
-		}
-		int searchInsertOld(int A[], int n, int target){
-			vector<int> data(A, A+n);
-			return std::lower_bound(data.begin(), data.end(), target)-data.begin();
+			if(A[left] == target)
+				ans.push_back(left);
+			else
+				return vector<int>(2,-1);
+
+			right = n;
+			while(left < right){
+				middle = (left + right) / 2;
+				if(A[middle] <= target){
+					left = middle + 1;
+				}
+				else
+					right = middle;
+			}
+			ans.push_back(left-1);
+			return ans;
 		}
 };
 
 int main()
 {
-	int A[] = {3,3,3,3,3,3,5,6};
-	int target = 3;
+	int A[] = {1,8,8,8,9};
+	int target = 9;
 	Solution sln;
-	int ans = sln.searchInsert(A, 8, target);
-	cout<<ans<<endl;
+	vector<int> ans = sln.searchRange(A, 5, target);
+	for(auto it : ans)
+		cout<<it<<endl;
 	return 0;
 }
