@@ -15,6 +15,8 @@
  *
  * =====================================================================================
  */
+#include<time.h>
+#include<limits.h>
 #include<iostream>
 #include<stack>
 using namespace std;
@@ -71,9 +73,11 @@ class Solution{
 
 int main(){
 	Solution sln;
-	double x = -2;
-	int n = 15;
-	double ans  = sln.pow(x, n);
+	double x = -0.001;
+	int n = INT_MAX;
+	clock_t start = clock();
+	double ans  = sln.pow_stack(x, n);
+	cout<<"Time : "<<(clock() - start)/CLOCKS_PER_SEC<<endl;
 	cout<<ans<<endl;
 	return 0;
 }
