@@ -1,12 +1,12 @@
 /*
  * =====================================================================================
  *
- *       Filename:  112_path_sum.cc
+ *       Filename:  113_path_sum3.cc
  *
  *    Description:  
  *
  *        Version:  1.0
- *        Created:  04/19/2015 07:59:15 PM
+ *        Created:  04/20/2015 10:26:23 PM
  *       Revision:  none
  *       Compiler:  gcc
  *
@@ -19,6 +19,7 @@
 
 #include<algorithm>
 #include<stack>
+#include<vector>
 #include<utility>
 using namespace std;
 struct TreeNode {
@@ -29,33 +30,36 @@ struct TreeNode {
 };
 
 class Solution{
-	bool recursion(TreeNode* root, int sum, int target){
+	vector<vector<int> > ans;
+	void recursion(TreeNode* root, int sum, int target, vector<int>& path){
+		path.push_back(root->val);
 		if(root->left == NULL && root->right == NULL){
 			if(sum + root->val == target)
-				return true;
-			return false;
+				ans.push_back(path);
+		}else{
+			if(root->left != NULL)
+				recursion(root->left, sum + root->val, target, path);
+			if(root->right != NULL)
+				recursion(root->right, sum + root->val, target, path);
 		}
-		bool ans = false;
-		if(root->left != NULL)
-			ans = recursion(root->left, sum + root->val, target);
-		if(ans)
-			return ans;
-		if(root->right != NULL)
-			ans = recursion(root->right, sum + root->val, target);
-		return ans;
+		path.pop_back();
 	}
 public:
-	bool hasPathSum_old(TreeNode* root, int sum){
+	vector<vector<int> > pathSum(TreeNode* root, int sum){
 		if(root == NULL)
-			return false;
-		return recursion(root, 0, sum);
+			return ans;
+		vector<int> path;
+		recursion(root, 0, sum, path);
+		return ans;
 	}
-	bool hasPathSum(TreeNode* root, int sum){
+	vector<vector<int> > pathSum_stack(TreeNode* root, int sum){
+		vector<vector<int> > ans;
 		if(root == NULL)
-			return false;
+			return ans;
 		int val;
 		bool seen;
 		TreeNode* node;
+		vector<int> path;
 		stack<std::pair<TreeNode*, bool> > s;
 		s.push(std::make_pair(root, false));
 		while(!s.empty()){
@@ -64,20 +68,24 @@ public:
 			if(seen){
 				s.pop();
 				val -= node->val;
+				path.pop_back();
 			}else{
 				val += node->val;
+				path.push_back(node->val);
 				std::pair<TreeNode*, bool>& tn = s.top();
 				tn.second = true;
 				if(root->right == NULL && root->left == NULL){
 					if(val == sum)
-						return true;
+						ans.push_back(path);
 				}
-				if(root->right != NULL)
-					s.push(std::make_pair(root->right, false));
-				if(root->left != NULL)
-					s.push(std::make_pair(root->left, false));
+				else{
+					if(root->right != NULL)
+						s.push(std::make_pair(root->right, false));
+					if(root->left != NULL)
+						s.push(std::make_pair(root->left, false));
+				}
 			}
 		}
-		return false;
+		return ans;
 	}
 };
