@@ -23,18 +23,21 @@
 #include<iostream>
 using namespace std;
 
+/*
+ * DP
+ * exist[i] 表示从i开始的到S结尾的字串中是否可以划分.
+ */
 class Solution{
 	string s;
 	unsigned int _min_size;
 	unsigned int _max_size;
 	unsigned int _size;
 	bool check(int start, unordered_set<string>& word_dict, bool* exists){
-		if(exists[start])
+		if(s.size() < start + _min_size || exists[start])
 			return false;
-		unsigned int i, min, max;
-		min = s.size() < _min_size ? s.size() :  _min_size;
-		max = (_max_size < s.size() ? _max_size : s.size())+1;
-		for(i = min; i != max; i++){
+		unsigned int i, max;
+		max = (start + _max_size < s.size() ? _max_size : s.size()-start)+1;
+		for(i = _min_size; i != max; i++){
 			unordered_set<string>::const_iterator got = word_dict.find(s.substr(start, i));
 			if(got != word_dict.end()){
 				if((start+i) == s.size() || check(start + i, word_dict, exists))
