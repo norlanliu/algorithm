@@ -30,8 +30,40 @@ class Solution {
 		}
 		return true;
 	}
+
+	string s;
+	int size;
+	void backtracking(vector<vector<string> >& ans, vector<string> &tmp, int start){
+		if(start == size){
+			ans.push_back(tmp);
+			return;
+		}
+		int i, m, n;
+		for(i = size-1; i >= start; --i){
+			m = start; n = i;
+			while(m < n && s[m] == s[n]){
+				m++;
+				n--;
+			}
+			if(m >= n){
+				tmp.push_back(s.substr(start, i - start+1));
+				backtracking(ans, tmp, i+1);
+				tmp.pop_back();
+			}
+		}
+	}
 public:
     vector<vector<string>> partition(string s) {
+		vector<vector<string> > ans;
+		if(s.size() == 0)
+			return ans;
+		vector<string> tmp;
+		this->s = s;
+		this->size = s.size();
+		backtracking(ans, tmp, 0);
+		return ans;
+	}
+    vector<vector<string>> partition_old(string s) {
 		reverse(s.begin(), s.end());
 		int i;
 		unsigned j, k, size;
