@@ -20,47 +20,34 @@
 #include<iostream>
 #include<algorithm>
 using namespace std;
+
+/*
+ * DP
+ * vec[i] 表示0-(i-1)字串的最小切割数
+ */
 class Solution {
 public:
     int minCut(string s) {
 		if(s.size() == 0)
 			return 0;
 		int i, j, size;
-		int m, n;
 		size = s.size();
-        int vec[size];
-		memset(vec, 0, sizeof(int) * size);
-		m = 0; n = size-1;
-		while(m < n && s[m] == s[n]){
-			m++;
-			n--;
+        int vec[size+1];
+		for(i = 0; i <= size; ++i){
+			vec[i] = i-1;
 		}
-		if(m >= n){
-			return 0;
+		for(i = 0; i != size; ++i){
+			for(j = 0; i+j < size && i-j >=0 && s[i-j]==s[i+j]; ++j)
+				vec[i+j+1] = min(vec[i+j+1], vec[i-j] + 1);
+			for(j = 1; i+j < size && i-j+1 >=0 && s[i-j+1]==s[i+j]; ++j)
+				vec[i+j+1] = min(vec[i+j+1], vec[i-j+1] + 1);
 		}
-		vec[0] = 1;
-		for(i = 1; i != size; ++i){
-			vec[i] = vec[i-1] + 1;
-			for(j = i-1; j >= 0; --j){
-				m = j; n = i;
-				while(m < n && s[m] == s[n]){
-					m++;
-					n--;
-				}
-				if(m >= n){
-					if(j == 0)
-						vec[i] = 1;
-					else if(vec[i] > (vec[j-1] + 1))
-						vec[i] = vec[j-1] + 1;
-				}
-			}
-		}
-		return vec[size-1]-1;
+		return vec[size];
 	}
 };
 
 int main(){
-	string s = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+	string s = "aa";
 	Solution sln;
 	int ans = sln.minCut(s);
 	cout<<ans<<endl;
