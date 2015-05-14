@@ -29,9 +29,9 @@ struct ListNode {
 
 class Solution {
 public:
-    bool hasCycle(ListNode *head) {
+    ListNode* detectCycle(ListNode *head) {
 		if(head == NULL)
-			return false;
+			return NULL;
 		ListNode* first, *second;
 		first = head;
 		second = head->next;
@@ -40,27 +40,27 @@ public:
 			if(second->next != NULL)
 				second = second->next->next;
 			else
-				return false;
+				return NULL;
 		}
-		return second == NULL ? false : true;
-	}
-    bool hasCycle_old(ListNode *head) {
-        unordered_map<ListNode*, bool> is_visited;
-		while(head != NULL){
-			if(is_visited.find(head->next) != is_visited.end()){
-				return true;
+		if(second == NULL)
+			return NULL;
+		while(head != second){
+			first = second->next;
+			while(first != second){
+				if(first == head)
+					return head;
+				first = first->next;
 			}
-			is_visited[head] = true;
 			head = head->next;
 		}
-		return false;
-    }
+		return head;
+	}
 };
 
 int main(){
 	Solution sln;
 	ListNode* root = new ListNode(1);
 	root->next = new ListNode(2);
-	cout<<sln.hasCycle(root)<<endl;
+	cout<<sln.detectCycle(root)<<endl;
 	return 0;
 }
