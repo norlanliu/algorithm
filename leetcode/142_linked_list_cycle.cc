@@ -34,24 +34,19 @@ public:
 			return NULL;
 		ListNode* first, *second;
 		first = head;
-		second = head->next;
-		while(second != NULL && first != second){
+		second = head;
+		do{
 			first = first->next;
 			if(second->next != NULL)
 				second = second->next->next;
 			else
 				return NULL;
-		}
+		}while(second != NULL && first != second);
 		if(second == NULL)
 			return NULL;
 		while(head != second){
-			first = second->next;
-			while(first != second){
-				if(first == head)
-					return head;
-				first = first->next;
-			}
 			head = head->next;
+			second = second->next;
 		}
 		return head;
 	}
